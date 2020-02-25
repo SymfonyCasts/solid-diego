@@ -6,9 +6,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-/**
- * Service class for properly storing new users
- */
 class UserManager
 {
     private $passwordEncoder;
@@ -20,15 +17,12 @@ class UserManager
         $this->entityManager = $entityManager;
     }
 
-    public function setPassword(User $user, string $plainPassword)
+    public function create(User $user, string $plainPassword)
     {
         $user->setPassword(
             $this->passwordEncoder->encodePassword($user, $plainPassword)
         );
-    }
 
-    public function save(User $user)
-    {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }

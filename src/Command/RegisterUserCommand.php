@@ -9,19 +9,23 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegisterUserCommand extends Command
 {
     protected static $defaultName = 'app:user:register';
 
+    private $mailer;
     private $entityManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(MailerInterface $mailer, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         parent::__construct();
 
+        $this->mailer = $mailer;
         $this->entityManager = $entityManager;
         $this->passwordEncoder = $passwordEncoder;
     }
@@ -52,9 +56,19 @@ class RegisterUserCommand extends Command
 
         $io->success('User created successfully');
 
-        $io->note('Please do not forget to send an email to the user with his credentials. The user will be asked to change his password after login in');
-        $io->writeln('Email: ' . $user->getEmail());
-        $io->writeln('Password: ' . $user->getPassword());
+        $token = '';
+        $link = '';
+        // store token somehow
+
+        $confirmationEmail = (new Email())
+            ->from('staff@example.com')
+            ->to($user->getEmail())
+            ->subject('You have been signed up to...')
+            ->text('You can now login into...');
+
+        $this->mailer->send($confirmationEmail);
+
+        $io->success('Email sent successfully');
 
         return 0;
     }

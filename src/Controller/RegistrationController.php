@@ -3,53 +3,36 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\Type\RegistrationFormType;
 use App\Manager\UserManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/signup", name="signup")
      */
-    public function signup(
-        Request $request,
-        UserManager $userManager,
-//        Mailer $mailer,
-//        TokenGeneratorInterface $tokenGenerator,
-        UserPasswordEncoderInterface $encoder,
-        EntityManagerInterface $entityManager
-    )
+    public function signup(Request $request, UserManager $userManager)
     {
-        $form = $this->createForm(UserType::class);
+        $form = $this->createForm(RegistrationFormType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var $user User */
             $user = $form->getData();
-            $plainPassword = $form->get('plain_password')->getData();
+            $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode user password
-            $userManager->setPassword($user, $plainPassword);
+            $userManager->create($user, $plainPassword);
 
-            // user storage
-            $userManager->save($user);
+            $this->addFlash('success', 'User created successfully');
 
-            // user notification
-            $token = $tokenGenerator->generate();
-            $confirmationLink = $this->generateUrl('app_account_confirmation', ['token' => $token]);
-            $mailer->sendConfirmationEmail($confirmationLink, $user->getEmail(), $user->getUsername());
-
-            // flash message
-            // return redirect
+            $this->redirectToRoute('home');
         }
 
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
+        return $this->render('registration.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }
