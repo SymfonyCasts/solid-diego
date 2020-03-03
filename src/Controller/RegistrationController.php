@@ -24,7 +24,7 @@ class RegistrationController extends AbstractController
             $user = $form->getData();
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $userManager->create($user, $plainPassword);
+            $userManager->register($user, $plainPassword);
 
             $this->addFlash('success', 'User created successfully');
 
@@ -34,5 +34,15 @@ class RegistrationController extends AbstractController
         return $this->render('registration.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    public function resend(Request $request)
+    {
+        $email = $request->get('email');
+
+        // fetch user
+        // check not null
+
+
     }
 }
