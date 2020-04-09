@@ -58,6 +58,11 @@ class User implements UserInterface
      */
     private $agreedToTermsAt;
 
+    /**
+     * @var string
+     */
+    private $confirmationToken;
+
     public function __construct()
     {
         $this->bigFootSightings = new ArrayCollection();
@@ -203,5 +208,15 @@ class User implements UserInterface
         $this->agreedToTermsAt = $agreedToTermsAt;
 
         return $this;
+    }
+
+    public function setConfirmationToken(string $token)
+    {
+        $this->confirmationToken = $token;
+    }
+
+    public function getConfirmationToken(): string
+    {
+        return $this->confirmationToken;
     }
 }
