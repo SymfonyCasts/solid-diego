@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class ConfirmationEmailSender
@@ -22,7 +23,7 @@ class ConfirmationEmailSender
     {
         $confirmationLink = $this->router->generate('check_confirmation_link', [
             'token' => $user->getConfirmationToken()
-        ]);
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $confirmationEmail = (new TemplatedEmail())
             ->from('staff@example.com')
