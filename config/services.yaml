@@ -27,4 +27,5 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Service\SightingScorer:
-        arguments: [!tagged scoring.factor] # Inject all services tagged with "scoring.factor"
+        arguments:
+            $scoringFactors: !tagged scoring.factor # Inject all services tagged with "scoring.factor"

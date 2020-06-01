@@ -12,9 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class BigFootSightingController extends AbstractController
 {
     /**
-     * @Route("/sighting/upload")
+     * @Route("/sighting/new")
      */
-    public function upload(Request $request, SightingScorer $sightingScoreCalculator, EntityManagerInterface $entityManager)
+    public function upload(Request $request, SightingScorer $sightingScorer, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(BigFootSightingType::class);
         $form->handleRequest($request);
@@ -23,7 +23,7 @@ class BigFootSightingController extends AbstractController
             /** @var BigFootSighting $sighting */
             $sighting = $form->getData();
 
-            $score = $sightingScoreCalculator->score($sighting);
+            $score = $sightingScorer->score($sighting);
 
             $sighting->setScore($score);
 
