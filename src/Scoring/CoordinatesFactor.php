@@ -13,9 +13,10 @@ class CoordinatesFactor implements ScoringFactorInterface
         $lng = (float)$sighting->getLongitude();
 
         // California edge to edge coordinates
+        // It works like if the state has a rectangle shape
         if (true
             && $lat >= 32.5121 && $lat <= 42.0126
-            && $lng >= -114.1315 && $lat <= -124.6509
+            && $lng >= -124.6509 && $lng <= -114.1315
         ) {
             $score += 30;
         }
