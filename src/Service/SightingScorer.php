@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\BigFootSighting;
-use App\Scoring\PhotoFactor;
 use App\Scoring\ScoringFactorInterface;
 
 class SightingScorer
@@ -23,11 +22,6 @@ class SightingScorer
         $score = 0;
         /** @var ScoringFactorInterface $scoringFactor */
         foreach ($this->scoringFactors as $scoringFactor) {
-            // LSP violation!
-            if ($scoringFactor instanceof PhotoFactor && empty($sighting->getPhotos())) {
-                continue;
-            }
-
             $score += $scoringFactor->score($sighting);
         }
 
