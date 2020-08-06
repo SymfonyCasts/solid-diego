@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\BigFootSighting;
+use App\Model\BigfootSightingScore;
 use App\Scoring\ScoringFactorInterface;
 
 class SightingScorer
@@ -17,7 +18,7 @@ class SightingScorer
         $this->scoringFactors = $scoringFactors;
     }
 
-    public function score(BigFootSighting $sighting): int
+    public function score(BigFootSighting $sighting): BigfootSightingScore
     {
         $score = 0;
         /** @var ScoringFactorInterface $scoringFactor */
@@ -25,6 +26,6 @@ class SightingScorer
             $score += $scoringFactor->score($sighting);
         }
 
-        return $score;
+        return new BigfootSightingScore($score);
     }
 }
