@@ -8,7 +8,7 @@ use App\Model\DebuggableBigfootSightingScore;
 
 class DebuggableSightingScorer extends SightingScorer
 {
-    public function score(BigFootSighting $sighting): BigfootSightingScore
+    public function score(BigFootSighting $sighting): DebuggableBigfootSightingScore
     {
         $startTime = microtime(true);
         $bfsScore = parent::score($sighting);

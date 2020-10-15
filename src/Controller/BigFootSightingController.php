@@ -23,9 +23,8 @@ class BigFootSightingController extends AbstractController
             /** @var BigFootSighting $sighting */
             $sighting = $form->getData();
 
-            $score = $sightingScorer->score($sighting);
-
-            $sighting->setScore($score);
+            $bigfootSightingScore = $sightingScorer->score($sighting);
+            $sighting->setScore($bigfootSightingScore->getScore());
 
             $entityManager->persist($sighting);
             $entityManager->flush();
